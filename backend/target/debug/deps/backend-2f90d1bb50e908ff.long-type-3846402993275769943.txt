@@ -1,0 +1,5 @@
+Governor<PeerIpKeyExtractor, governor::middleware::NoOpMiddleware<governor::clock::quanta::QuantaInstant>, Route>
+axum::http::Request<axum::body::Body>
+Governor<PeerIpKeyExtractor, governor::middleware::NoOpMiddleware<governor::clock::quanta::QuantaInstant>, Route>: tower_service::Service<axum::http::Request<axum::body::Body>>
+Governor<K, governor::middleware::NoOpMiddleware<governor::clock::quanta::QuantaInstant>, S>
+Governor<K, governor::middleware::StateInformationMiddleware, S>

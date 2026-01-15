@@ -1,0 +1,12 @@
+/Users/putta/.gemini/antigravity/scratch/Seventeen29-OS/backend/target/debug/deps/thiserror-8b414573ab426476.d: /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.17/src/lib.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.17/src/aserror.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.17/src/display.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.17/src/var.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.17/src/private.rs /Users/putta/.gemini/antigravity/scratch/Seventeen29-OS/backend/target/debug/build/thiserror-00cde9081ee0f228/out/private.rs
+
+/Users/putta/.gemini/antigravity/scratch/Seventeen29-OS/backend/target/debug/deps/libthiserror-8b414573ab426476.rmeta: /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.17/src/lib.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.17/src/aserror.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.17/src/display.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.17/src/var.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.17/src/private.rs /Users/putta/.gemini/antigravity/scratch/Seventeen29-OS/backend/target/debug/build/thiserror-00cde9081ee0f228/out/private.rs
+
+/Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.17/src/lib.rs:
+/Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.17/src/aserror.rs:
+/Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.17/src/display.rs:
+/Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.17/src/var.rs:
+/Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.17/src/private.rs:
+/Users/putta/.gemini/antigravity/scratch/Seventeen29-OS/backend/target/debug/build/thiserror-00cde9081ee0f228/out/private.rs:
+
+# env-dep:OUT_DIR=/Users/putta/.gemini/antigravity/scratch/Seventeen29-OS/backend/target/debug/build/thiserror-00cde9081ee0f228/out

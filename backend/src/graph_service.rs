@@ -111,3 +111,76 @@ pub struct HandshakeResult {
     pub linked_risks: i32,
     pub involved_people: i32,
 }
+
+#[derive(serde::Serialize)]
+pub struct RiskRollup {
+    pub root_id: Uuid,
+    pub total_risk_score: i64,
+    pub incident_count: i64,
+    pub asset_count: i64,
+}
+
+impl GraphService {
+    /// Calculates the "Safety Heatmap" for a given Entity (Site, Asset Type, etc.)
+    /// Uses Recursive CTE to traverse hierarchy and sum weighted risks.
+    pub async fn get_risk_rollup(pool: &PgPool, root_id: Uuid) -> Result<RiskRollup> {
+        // Weighted Logic:
+        // - Incident (High Severity) = 10 (Mocked as 'severe')
+        // - Incident (Low Severity) = 1 (Default)
+        // - Near Miss = 2
+        
+        let row = sqlx::query!(
+            r#"
+            WITH RECURSIVE hierarchy AS (
+                -- Base Case: The Root Node
+                SELECT target_id as id, 1 as depth
+                FROM neural_edges
+                WHERE source_id = $1 AND relation = 'CONTAINS'
+                
+                UNION ALL
+                
+                -- Recursive Step: Find children (Assets in Zones, etc.)
+                SELECT e.target_id, h.depth + 1
+                FROM neural_edges e
+                INNER JOIN hierarchy h ON e.source_id = h.id
+                WHERE e.relation = 'CONTAINS' AND h.depth < 5
+            ),
+            
+            -- Find Incidents linked to these entities
+            linked_incidents AS (
+                SELECT i.source_id as incident_id
+                FROM neural_edges i
+                JOIN hierarchy h ON i.target_id = h.id  -- Incident -> Asset
+                WHERE i.relation = 'INVOLVES' AND i.source_module = 'incidents'
+                
+                UNION
+                
+                -- Also include incidents linked directly to ROOT
+                SELECT i.source_id
+                FROM neural_edges i
+                WHERE i.target_id = $1 AND i.relation = 'INVOLVES' AND i.source_module = 'incidents'
+            )
+            
+            -- Aggregation
+            SELECT 
+                COUNT(DISTINCT incident_id) as incident_count,
+                (SELECT COUNT(*) FROM hierarchy) as asset_count
+            FROM linked_incidents
+            "#,
+            root_id
+        )
+        .fetch_one(pool)
+        .await?;
+
+        // Simple mock weighting (Severity = 5 per incident) until we join with `records` table attributes
+        // In production, we'd join `linked_incidents` with `records` to get actual `severity` field.
+        let weighted_score = row.incident_count.unwrap_or(0) * 5; 
+
+        Ok(RiskRollup {
+            root_id,
+            total_risk_score: weighted_score,
+            incident_count: row.incident_count.unwrap_or(0),
+            asset_count: row.asset_count.unwrap_or(0),
+        })
+    }
+}

@@ -1,35 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Sidebar from './components/Sidebar';
+import ModuleViewer from './components/ModuleViewer';
+import Dashboard from './components/Dashboard';
+import NeuralView from './components/NeuralView';
+
+import WorkshopLayout from './views/Workshop/WorkshopLayout';
+
+// Layout wrapper to hide Sidebar for Workshop mode if desired, or keep it.
+// For now, replacing the main layout area content.
+import { useEffect } from 'react';
 
 function App() {
-  const [count, setCount] = useState(0)
+  useEffect(() => {
+    // Commercialization: Fetch White-Label Theme
+    fetch('http://localhost:3000/api/config/theme')
+      .then(res => res.json())
+      .then(theme => {
+        console.log("Applying Theme:", theme);
+        const root = document.documentElement;
+        if (theme.primaryColor) root.style.setProperty('--primary-color', theme.primaryColor);
+        if (theme.glassOpacity) root.style.setProperty('--glass-opacity', theme.glassOpacity);
+        if (theme.borderRadius) root.style.setProperty('--border-radius', theme.borderRadius);
+        if (theme.fontFamily) root.style.setProperty('--font-family', theme.fontFamily);
+      })
+      .catch(console.error);
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Router>
+      <div
+        className="flex h-screen w-full bg-[#0a0f1c] text-white font-sans overflow-hidden selection:bg-[var(--primary-color)]"
+        style={{ fontFamily: 'var(--font-family, sans-serif)' }}
+      >
+        <Sidebar />
+
+        {/* Main Content Area */}
+        <main className="flex-1 relative overflow-hidden flex flex-col">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/modules/:moduleName" element={<ModuleViewer />} />
+            <Route path="/neural" element={<NeuralView />} />
+            <Route path="/workshop" element={<WorkshopLayout />} />
+          </Routes>
+        </main>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </Router>
+  );
 }
 
-export default App
+export default App;

@@ -1,0 +1,14 @@
+/Users/putta/.gemini/antigravity/scratch/Seventeen29-OS/calc-engine/target/debug/deps/serde-bca6a9202127a6fb.d: /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/putta/.gemini/antigravity/scratch/Seventeen29-OS/calc-engine/target/debug/build/serde-2beb76a2a4a45d11/out/private.rs
+
+/Users/putta/.gemini/antigravity/scratch/Seventeen29-OS/calc-engine/target/debug/deps/libserde-bca6a9202127a6fb.rlib: /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/putta/.gemini/antigravity/scratch/Seventeen29-OS/calc-engine/target/debug/build/serde-2beb76a2a4a45d11/out/private.rs
+
+/Users/putta/.gemini/antigravity/scratch/Seventeen29-OS/calc-engine/target/debug/deps/libserde-bca6a9202127a6fb.rmeta: /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/putta/.gemini/antigravity/scratch/Seventeen29-OS/calc-engine/target/debug/build/serde-2beb76a2a4a45d11/out/private.rs
+
+/Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs:
+/Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs:
+/Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs:
+/Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs:
+/Users/putta/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs:
+/Users/putta/.gemini/antigravity/scratch/Seventeen29-OS/calc-engine/target/debug/build/serde-2beb76a2a4a45d11/out/private.rs:
+
+# env-dep:OUT_DIR=/Users/putta/.gemini/antigravity/scratch/Seventeen29-OS/calc-engine/target/debug/build/serde-2beb76a2a4a45d11/out
