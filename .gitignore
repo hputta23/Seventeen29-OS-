@@ -1,11 +1,14 @@
 # Rust
-/target
+target/
 **/*.rs.bk
 
 # Node
 node_modules/
 dist/
-.env
+.expo/
+web-build/
 
-# MacOS
+# Config
+.env
 .DS_Store
+*.log
