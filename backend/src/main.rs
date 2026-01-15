@@ -47,6 +47,8 @@ async fn main() -> anyhow::Result<()> {
         .route("/api/modules", post(api::create_module))
         .route("/api/meta/:module", get(api::get_module_metadata))
         .route("/api/records/:module", get(api::get_records))
+        .route("/api/records/:module", post(api::create_record))
+        .route("/api/migrate/moc", post(api::migrate_moc))
         .route("/api/links", post(api::create_link))
         .route("/api/handshake/:id", get(api::check_handshake))
         .route("/api/modules/publish", post(api::publish_module))

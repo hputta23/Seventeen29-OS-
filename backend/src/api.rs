@@ -65,29 +65,51 @@ pub async fn check_handshake(
 
 // New Endpoint: Get Module Metadata
 pub async fn get_module_metadata(
-    State(_pool): State<PgPool>,
+    State(pool): State<PgPool>,
     axum::extract::Path(module_name): axum::extract::Path<String>,
 ) -> impl IntoResponse {
-    let fields = match module_name.as_str() {
-        "incidents" => vec![
-            json!({"name": "description", "type": "text", "required": true}),
-            json!({"name": "severity", "type": "number", "required": true}),
-        ],
-        "risks" => vec![
-            json!({"name": "title", "type": "text", "required": true}),
-            json!({"name": "status", "type": "enum", "options": ["OPEN", "MITIGATED", "REQUIRES_REVIEW"]}),
-        ],
-        "sites" => vec![
-            json!({"name": "name", "type": "text", "required": true}),
-            json!({"name": "location", "type": "text", "required": false}),
-        ],
-         _ => vec![json!({"name": "name", "type": "text", "required": true})],
-    };
+    use sqlx::Row;
+    
+    // Fetch latest blueprint from the ledger
+    let row = sqlx::query(
+        "SELECT blueprint FROM blueprint_commits WHERE module_name = $1 ORDER BY version DESC LIMIT 1"
+    )
+    .bind(&module_name)
+    .fetch_optional(&pool)
+    .await;
 
-    Json(json!({
-        "name": module_name,
-        "fields": fields
-    }))
+    match row {
+        Ok(Some(record)) => {
+            let blueprint: serde_json::Value = record.try_get("blueprint").unwrap_or(json!({}));
+            // Return just the blueprint content expected by frontend
+            // The frontend might expect { name: "...", fields: [...] } which maps to our Blueprint struct
+            Json(blueprint).into_response()
+        },
+        Ok(None) => {
+            // Fallback to hardcoded/mocked for system modules if not in DB yet (or return 404)
+            let fields = match module_name.as_str() {
+                "incidents" => vec![
+                    json!({"name": "description", "type": "text", "required": true}),
+                    json!({"name": "severity", "type": "number", "required": true}),
+                ],
+                "risks" => vec![
+                    json!({"name": "title", "type": "text", "required": true}),
+                    json!({"name": "status", "type": "enum", "options": ["OPEN", "MITIGATED", "REQUIRES_REVIEW"]}),
+                ],
+                "sites" => vec![
+                    json!({"name": "name", "type": "text", "required": true}),
+                    json!({"name": "location", "type": "text", "required": false}),
+                ],
+                 _ => return (StatusCode::NOT_FOUND, Json(json!({"error": "Module not found"}))).into_response(),
+            };
+        
+            Json(json!({
+                "name": module_name,
+                "fields": fields
+            })).into_response()
+        },
+        Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": e.to_string()}))).into_response(),
+    }
 }
 
 // New Endpoint: Get Records (Generic Select)
@@ -107,6 +129,94 @@ pub async fn get_records(
              Json(data.unwrap_or(json!([])))
         },
         Err(e) => Json(json!({"error": e.to_string()}))
+    }
+}
+
+// New Endpoint: Create Record
+pub async fn create_record(
+    State(pool): State<PgPool>,
+    axum::extract::Path(module_name): axum::extract::Path<String>,
+    Json(payload): Json<serde_json::Value>,
+) -> impl IntoResponse {
+    use sqlx::Row;
+    
+    // Extract field names and values from payload
+    let obj = match payload.as_object() {
+        Some(o) => o,
+        None => return (StatusCode::BAD_REQUEST, Json(json!({"error": "Invalid payload"}))).into_response(),
+    };
+    
+    let mut field_names = Vec::new();
+    let mut field_values = Vec::new();
+    
+    for (key, value) in obj.iter() {
+        if key != "id" && key != "created_at" && key != "updated_at" {
+            field_names.push(key.clone());
+            field_values.push(value.clone());
+        }
+    }
+    
+    if field_names.is_empty() {
+        return (StatusCode::BAD_REQUEST, Json(json!({"error": "No fields provided"}))).into_response();
+    }
+    
+    // Build INSERT query dynamically
+    let placeholders: Vec<String> = (1..=field_names.len()).map(|i| format!("${}", i)).collect();
+    let insert_sql = format!(
+        "INSERT INTO {} ({}) VALUES ({}) RETURNING id",
+        module_name,
+        field_names.join(", "),
+        placeholders.join(", ")
+    );
+    
+    // Build query with bindings
+    let mut query = sqlx::query(&insert_sql);
+    for value in &field_values {
+        // Convert JSON value to appropriate SQL type
+        query = match value {
+            serde_json::Value::String(s) => {
+                // Treat empty strings as NULL for optional fields
+                if s.is_empty() {
+                    query.bind(None::<String>)
+                } else {
+                    query.bind(s)
+                }
+            },
+            serde_json::Value::Number(n) => {
+                if let Some(i) = n.as_i64() {
+                    query.bind(i)
+                } else if let Some(f) = n.as_f64() {
+                    query.bind(f)
+                } else {
+                    query.bind(n.to_string())
+                }
+            },
+            serde_json::Value::Bool(b) => query.bind(b),
+            serde_json::Value::Null => query.bind(None::<String>),
+            _ => query.bind(value.to_string()),
+        };
+    }
+    
+    match query.fetch_one(&pool).await {
+        Ok(row) => {
+            let id: uuid::Uuid = row.try_get("id").unwrap_or_default();
+            (StatusCode::CREATED, Json(json!({"id": id, "message": "Record created successfully"}))).into_response()
+        },
+        Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": e.to_string()}))).into_response(),
+    }
+}
+
+// Migration endpoint to fix constraints
+pub async fn migrate_moc(
+    State(pool): State<PgPool>,
+) -> impl IntoResponse {
+    let result = sqlx::query("ALTER TABLE management_of_change ALTER COLUMN owner_id DROP NOT NULL")
+        .execute(&pool)
+        .await;
+    
+    match result {
+        Ok(_) => (StatusCode::OK, Json(json!({"message": "Migration successful"}))).into_response(),
+        Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": e.to_string()}))).into_response(),
     }
 }
 
