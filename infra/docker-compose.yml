@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: seventeen29_db
+    environment:
+      POSTGRES_USER: seventeen29
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: seventeen29_kernel
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - s29_network
+
+#  graphdb:
+#    # Placeholder for Graph DB (SurrealDB or Neo4j) 
+#    # We will stick to Postgres for now and potentially use Apache AGE or simple relational definitions
+#    image: surrealdb/surrealdb:latest
+#    container_name: seventeen29_graph
+#    ports:
+#      - "8000:8000"
+#    command: start --user root --pass root file://data/surreal.db
+#    networks:
+#      - s29_network
+
+networks:
+  s29_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
