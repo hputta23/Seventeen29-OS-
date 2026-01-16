@@ -56,6 +56,13 @@ export default function WorkshopLayout() {
         }
     };
 
+    const handleRemoveItem = (id: string) => {
+        setCanvasItems(items => items.filter(item => item.id !== id));
+        if (selectedId === id) {
+            setSelectedId(null);
+        }
+    };
+
     const selectedItem = canvasItems.find(i => i.id === selectedId);
 
     return (
@@ -123,7 +130,7 @@ export default function WorkshopLayout() {
                 {/* Main Content Area */}
                 <div className="flex w-full pt-16">
                     <Palette />
-                    <Canvas items={canvasItems} previewMode={previewMode} />
+                    <Canvas items={canvasItems} previewMode={previewMode} onRemoveItem={handleRemoveItem} />
                     <Inspector selectedField={selectedItem} />
                 </div>
             </div>

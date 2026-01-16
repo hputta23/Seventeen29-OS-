@@ -4,9 +4,10 @@ import { FieldRegistry } from '../../components/FieldRegistry';
 interface CanvasProps {
     items: any[];
     previewMode: boolean;
+    onRemoveItem: (id: string) => void;
 }
 
-export function Canvas({ items, previewMode }: CanvasProps) {
+export function Canvas({ items, previewMode, onRemoveItem }: CanvasProps) {
     const { setNodeRef, isOver } = useDroppable({
         id: 'canvas-droppable',
     });
@@ -34,7 +35,12 @@ export function Canvas({ items, previewMode }: CanvasProps) {
                 ) : (
                     <div className="space-y-4">
                         {items.map((item, index) => (
-                            <CanvasItem key={item.id || index} item={item} previewMode={previewMode} />
+                            <CanvasItem
+                                key={item.id || index}
+                                item={item}
+                                previewMode={previewMode}
+                                onRemove={() => onRemoveItem(item.id)}
+                            />
                         ))}
                     </div>
                 )}
@@ -43,7 +49,7 @@ export function Canvas({ items, previewMode }: CanvasProps) {
     );
 }
 
-function CanvasItem({ item, previewMode }: { item: any, previewMode: boolean }) {
+function CanvasItem({ item, previewMode, onRemove }: { item: any, previewMode: boolean, onRemove: () => void }) {
     if (previewMode) {
         // Render Actual UI Component
         // Mocking a field definition for the registry
@@ -73,7 +79,12 @@ function CanvasItem({ item, previewMode }: { item: any, previewMode: boolean }) 
                 <div className="text-xs text-white/40 font-mono">{item.name}</div>
             </div>
             <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                <button className="text-xs text-red-400 hover:text-red-300">Remove</button>
+                <button
+                    onClick={(e) => { e.stopPropagation(); onRemove(); }}
+                    className="text-xs text-red-400 hover:text-red-300 hover:underline px-2 py-1"
+                >
+                    Remove
+                </button>
             </div>
         </div>
     );
