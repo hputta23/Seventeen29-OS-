@@ -3,11 +3,8 @@ import Sidebar from './components/Sidebar';
 import ModuleViewer from './components/ModuleViewer';
 import Dashboard from './components/Dashboard';
 import NeuralView from './components/NeuralView';
-
 import WorkshopLayout from './views/Workshop/WorkshopLayout';
-
-// Layout wrapper to hide Sidebar for Workshop mode if desired, or keep it.
-// For now, replacing the main layout area content.
+import CommandPalette from './components/CommandPalette';
 import { useEffect } from 'react';
 
 function App() {
@@ -32,6 +29,7 @@ function App() {
         className="flex h-screen w-full bg-[#0a0f1c] text-white font-sans overflow-hidden selection:bg-[var(--primary-color)]"
         style={{ fontFamily: 'var(--font-family, sans-serif)' }}
       >
+        <CommandPalette />
         <Sidebar />
 
         {/* Main Content Area */}
