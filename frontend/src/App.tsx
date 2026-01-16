@@ -33,13 +33,15 @@ function App() {
         <Sidebar />
 
         {/* Main Content Area */}
-        <main className="flex-1 relative overflow-hidden flex flex-col">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/modules/:moduleName" element={<ModuleViewer />} />
-            <Route path="/neural" element={<NeuralView />} />
-            <Route path="/workshop" element={<WorkshopLayout />} />
-          </Routes>
+        <main className="flex-1 relative overflow-y-auto flex flex-col bg-slate-950/50">
+          <div className="p-8 pb-20 max-w-7xl mx-auto w-full">
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/modules/:moduleName" element={<ModuleViewer />} />
+              <Route path="/neural" element={<NeuralView />} />
+              <Route path="/workshop" element={<WorkshopLayout />} />
+            </Routes>
+          </div>
         </main>
       </div>
     </Router>

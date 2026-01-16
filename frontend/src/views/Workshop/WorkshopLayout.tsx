@@ -10,6 +10,10 @@ export default function WorkshopLayout() {
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [previewMode, setPreviewMode] = useState(false);
 
+    // Metadata State
+    const [blueprintName, setBlueprintName] = useState('Untitled Blueprint');
+    const [isEditingName, setIsEditingName] = useState(false);
+
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
 
@@ -29,6 +33,29 @@ export default function WorkshopLayout() {
         }
     };
 
+    const handleTemplateSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const template = e.target.value;
+        if (template === 'clean') {
+            setCanvasItems([]);
+            setBlueprintName('New Module');
+        } else if (template === 'incident') {
+            setBlueprintName('Incident Report');
+            // Mock Template Data
+            setCanvasItems([
+                { id: '1', type: 'text', label: 'Title', name: 'title' },
+                { id: '2', type: 'textarea', label: 'Description', name: 'description' },
+                { id: '3', type: 'select', label: 'Severity', name: 'severity' },
+            ]);
+        } else if (template === 'risk') {
+            setBlueprintName('Risk Assessment');
+            // Mock Template Data
+            setCanvasItems([
+                { id: '1', type: 'text', label: 'Hazard', name: 'hazard' },
+                { id: '2', type: 'number', label: 'Risk Score', name: 'risk_score' },
+            ]);
+        }
+    };
+
     const selectedItem = canvasItems.find(i => i.id === selectedId);
 
     return (
@@ -37,8 +64,38 @@ export default function WorkshopLayout() {
                 {/* Header Toolbar */}
                 <div className="absolute top-0 left-64 right-0 h-16 border-b border-white/10 bg-slate-900/50 backdrop-blur z-10 flex items-center justify-between px-6">
                     <div className="flex items-center gap-4">
-                        <h1 className="font-bold text-lg">Untitled Blueprint *</h1>
-                        <span className="text-xs px-2 py-0.5 rounded bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">DRAFT</span>
+                        {isEditingName ? (
+                            <input
+                                autoFocus
+                                value={blueprintName}
+                                onChange={(e) => setBlueprintName(e.target.value)}
+                                onBlur={() => setIsEditingName(false)}
+                                onKeyDown={(e) => e.key === 'Enter' && setIsEditingName(false)}
+                                className="bg-white/5 border border-blue-500/50 rounded px-2 py-1 text-lg font-bold text-white focus:outline-none min-w-[200px]"
+                            />
+                        ) : (
+                            <h1
+                                onClick={() => setIsEditingName(true)}
+                                className="font-bold text-lg hover:text-blue-400 cursor-pointer border border-transparent hover:border-white/5 rounded px-2 py-1 transition-colors flex items-center gap-2"
+                                title="Click to rename"
+                            >
+                                {blueprintName}
+                            </h1>
+                        )}
+
+                        <div className="h-6 w-px bg-white/10 mx-2"></div>
+
+                        <select
+                            onChange={handleTemplateSelect}
+                            className="bg-black/20 border border-white/10 rounded-md px-2 py-1 text-xs text-slate-400 focus:outline-none focus:border-blue-500 cursor-pointer hover:bg-white/5"
+                        >
+                            <option value="">Select Template...</option>
+                            <option value="clean">Blank Draft</option>
+                            <option value="incident">Template: Incident</option>
+                            <option value="risk">Template: Risk</option>
+                        </select>
+
+                        <span className="text-xs px-2 py-0.5 rounded bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 ml-2">DRAFT</span>
                     </div>
 
                     <div className="flex items-center gap-3">

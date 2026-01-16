@@ -1,9 +1,32 @@
+import { AlertTriangle, ShieldCheck, Users, Box, GitBranch, Search } from 'lucide-react';
+
 export default function Dashboard() {
+    const triggerSearch = () => {
+        // Dispatch keyboard shortcut to open Command Palette
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, metaKey: true }));
+    };
+
     return (
-        <div className="space-y-6">
-            <header>
-                <h2 className="text-3xl font-bold">System Overview</h2>
-                <p className="text-slate-400">Welcome to specific Safety OS.</p>
+        <div className="space-y-8 animate-fade-in">
+            <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">System Overview</h2>
+                    <p className="text-slate-400 mt-1">Welcome to specific Safety OS.</p>
+                </div>
+
+                {/* Visual Search Trigger */}
+                <button
+                    onClick={triggerSearch}
+                    className="group flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300 w-full md:w-96 text-left"
+                >
+                    <Search className="text-slate-400 group-hover:text-cyan-400 transition-colors" size={20} />
+                    <span className="text-slate-400 group-hover:text-slate-200 text-sm font-medium transition-colors">Search anything...</span>
+                    <div className="ml-auto flex gap-1">
+                        <kbd className="hidden md:inline-flex h-6 items-center gap-1 rounded border border-white/10 bg-black/20 px-2 font-mono text-[10px] text-slate-400 group-hover:text-cyan-400 transition-colors">
+                            <span className="text-xs">⌘</span>K
+                        </kbd>
+                    </div>
+                </button>
             </header>
 
             {/* Modules Grid */}
