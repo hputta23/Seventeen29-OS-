@@ -1,1 +1,1 @@
-/Users/putta/.gemini/antigravity/scratch/Seventeen29-OS/calc-engine/target/wasm32-unknown-unknown/release/libcalc_engine.rlib: /Users/putta/.gemini/antigravity/scratch/Seventeen29-OS/calc-engine/src/lib.rs
+C:\Users\putta\.gemini\antigravity\scratch\Seventeen29-OS-\calc-engine\target\wasm32-unknown-unknown\release\libcalc_engine.rlib: C:\Users\putta\.gemini\antigravity\scratch\Seventeen29-OS-\calc-engine\src\lib.rs

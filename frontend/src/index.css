@@ -4,27 +4,61 @@
 
 @layer utilities {
   /* 
-     Luminance Guard: 
-     - Base background provided by Slate-900 for failing browsers
-     - Backdrop blur for glass effect
-     - Border for definition
+     Glassmorphism 2.0 (The Neural Glass)
+     - Increased depth with double borders (inner/outer)
+     - Smoother blur
+     - De-noising texture overlay via background-position if needed
   */
   .glass-panel {
-    @apply bg-slate-900/80 backdrop-blur-xl border border-white/10 shadow-xl;
+    @apply bg-slate-900/40 backdrop-blur-2xl border border-white/10 shadow-xl relative overflow-hidden;
+    box-shadow: 
+      0 4px 30px rgba(0, 0, 0, 0.1),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.05);
   }
   
   .glass-button {
-    @apply px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-200 border border-white/5;
+    @apply px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-300 border border-white/10 hover:border-white/20 hover:shadow-lg hover:shadow-cyan-500/10 active:scale-95;
   }
   
   .glass-input {
-      @apply bg-black/20 border border-white/10 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500/50 text-white placeholder-white/30;
+      @apply bg-black/30 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 text-white placeholder-white/30 transition-all duration-200;
+  }
+
+  /* Text Gradients */
+  .text-gradient-neural {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600;
   }
 }
 
+/* Animations */
+@keyframes breathing-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 body {
-  @apply bg-slate-950 text-slate-100 min-h-screen font-sans antialiased;
+  @apply bg-[#030712] text-slate-100 min-h-screen font-sans antialiased overflow-hidden;
+  font-family: 'Outfit', sans-serif;
+  
+  /* Dynamic Background */
+  background-size: 200% 200%;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.15) 0px, transparent 50%);
+    radial-gradient(circle at 15% 50%, rgba(6, 182, 212, 0.08), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(124, 58, 237, 0.08), transparent 25%),
+    linear-gradient(to bottom, #030712, #0f172a);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: -0.02em;
 }
