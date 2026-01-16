@@ -1,13 +1,8 @@
-import { LayoutGrid, AlertTriangle, ShieldCheck, Users, Box, Network, Hammer, GitBranch } from 'lucide-react';
+import { LayoutGrid, Network, Hammer } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 const navItems = [
     { icon: LayoutGrid, label: 'Dashboard', path: '/' },
-    { icon: AlertTriangle, label: 'Incidents', path: '/modules/incidents' },
-    { icon: ShieldCheck, label: 'Risks', path: '/modules/risks' },
-    { icon: Users, label: 'People', path: '/modules/people' },
-    { icon: Box, label: 'Sites', path: '/modules/sites' },
-    { icon: GitBranch, label: 'MOC', path: '/modules/Management_of_Change' },
     { icon: Network, label: 'Neural View', path: '/neural' },
     { icon: Hammer, label: 'Workshop', path: '/workshop' },
 ];

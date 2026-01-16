@@ -6,6 +6,40 @@ export default function Dashboard() {
                 <p className="text-slate-400">Welcome to specific Safety OS.</p>
             </header>
 
+            {/* Modules Grid */}
+            <section>
+                <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-bold">Modules</h3>
+                    <div className="h-px bg-white/10 flex-1 ml-4"></div>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    {[
+                        { title: 'Incidents', icon: 'AlertTriangle', count: '12', color: 'text-amber-400', link: '/modules/incidents' },
+                        { title: 'Risks', icon: 'ShieldCheck', count: '94%', color: 'text-emerald-400', link: '/modules/risks' },
+                        { title: 'People', icon: 'Users', count: '108', color: 'text-blue-400', link: '/modules/people' },
+                        { title: 'Sites', icon: 'Box', count: '4', color: 'text-purple-400', link: '/modules/sites' },
+                        { title: 'MOC', icon: 'GitBranch', count: 'Active', color: 'text-pink-400', link: '/modules/Management_of_Change' },
+                    ].map((mod) => (
+                        <a
+                            key={mod.title}
+                            href={mod.link}
+                            className="glass-panel p-4 rounded-xl hover:bg-white/5 transition-all duration-300 group cursor-pointer border hover:border-white/20"
+                        >
+                            <div className="flex flex-col items-center text-center gap-3">
+                                <div className={`w-10 h-10 rounded-full bg-white/5 flex items-center justify-center ${mod.color} group-hover:scale-110 transition-transform`}>
+                                    {/* Quick Icon Placeholder since we can't dynamically import easily without lookup map */}
+                                    <span className="font-bold text-lg">{mod.title.charAt(0)}</span>
+                                </div>
+                                <div>
+                                    <h4 className="font-medium text-sm">{mod.title}</h4>
+                                    <p className="text-xs text-slate-400 mt-1">{mod.count}</p>
+                                </div>
+                            </div>
+                        </a>
+                    ))}
+                </div>
+            </section>
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="glass-panel p-6 rounded-xl">
                     <h3 className="text-slate-400 text-sm font-medium uppercase tracking-wider">Active Incidents</h3>
