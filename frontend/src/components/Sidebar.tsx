@@ -5,6 +5,7 @@ const navItems = [
     { icon: LayoutGrid, label: 'Dashboard', path: '/' },
     { icon: Network, label: 'Neural View', path: '/neural' },
     { icon: Hammer, label: 'Workshop', path: '/workshop' },
+    { icon: ShieldCheck, label: 'Test Workflow', path: '/modules/workflow_test_module' },
 ];
 
 export default function Sidebar() {

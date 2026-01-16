@@ -18,7 +18,7 @@ const MOCK_SCHEMAS: Record<string, any[]> = {
     ]
 };
 
-export function Inspector({ selectedField }: { selectedField: any }) {
+export function Inspector({ selectedField, workflowStages = [], onUpdate }: { selectedField: any, workflowStages?: any[], onUpdate?: (updates: any) => void }) {
     if (!selectedField) {
         return (
             <aside className="w-80 border-l border-white/10 bg-black/20 backdrop-blur-md flex items-center justify-center p-8 text-center">
@@ -57,8 +57,29 @@ export function Inspector({ selectedField }: { selectedField: any }) {
                         type="text"
                         className="glass-input w-full font-mono text-sm"
                         defaultValue={selectedField.name}
+                        onChange={(e) => onUpdate?.({ name: e.target.value })}
                     />
                 </div>
+
+
+                {/* WORKFLOW CONFIGURATION */}
+                {workflowStages.length > 0 && (
+                    <div className="p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg space-y-2">
+                        <h3 className="text-sm font-semibold text-purple-300 flex items-center gap-2">
+                            Workflow Stage
+                        </h3>
+                        <select
+                            className="glass-input w-full text-sm"
+                            value={selectedField.stage_id || ''}
+                            onChange={(e) => onUpdate?.({ stage_id: e.target.value })}
+                        >
+                            <option value="">(No Stage - Show in all?)</option>
+                            {workflowStages.map(s => (
+                                <option key={s.id} value={s.id}>{s.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                )}
 
                 {/* NEURAL HANDSHAKE DESIGNER */}
                 {selectedField.type === 'relationship' && (
@@ -69,7 +90,12 @@ export function Inspector({ selectedField }: { selectedField: any }) {
                 {selectedField.type !== 'relationship' && (
                     <div className="space-y-4 pt-4 border-t border-white/10">
                         <label className="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" className="rounded bg-white/10 border-white/20" />
+                            <input
+                                type="checkbox"
+                                className="rounded bg-white/10 border-white/20"
+                                checked={selectedField.required || false}
+                                onChange={(e) => onUpdate?.({ required: e.target.checked })}
+                            />
                             <span className="text-sm text-slate-300">Required Field</span>
                         </label>
                     </div>
@@ -85,7 +111,7 @@ export function Inspector({ selectedField }: { selectedField: any }) {
                     </div>
                 )}
             </div>
-        </aside>
+        </aside >
     );
 }
 
